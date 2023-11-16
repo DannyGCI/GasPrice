@@ -2,8 +2,30 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>/* Add your custom styles here */body { font-family: Arial, sans-serif; text-align: center; } .calculator { max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); } input, select, button { margin: 10px 0; padding: 10px; width: 100%; box-sizing: border-box; }</style>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <style>
+    /* Add your custom styles here */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .calculator {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input, select, button {
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
     </head>
     <body>
         <div class="calculator">
@@ -12,10 +34,14 @@
             <input type="text" id="gasPriceUS" placeholder="Enter gas price in USD">
             <label for="gasPriceMexico">Gas Price in Mexico (Pesos):</label>
             <input type="text" id="gasPriceMexico" placeholder="Enter gas price in pesos">
+            <label for="tankCapacity">Car's Tank Capacity (Liters):</label>
+            <input type="text" id="tankCapacity" placeholder="Enter tank capacity in liters" value="87.0645">
             <button onclick="calculate()">Calculate</button>
             <h3>Results:</h3>
             <p id="pricePerLiterUS"></p>
             <p id="pricePerLiterMexico"></p>
+            <p id="costToFillTankUS"></p>
+            <p id="costToFillTankMexico"></p>
         </div>
         <script>
   // Constant unit conversion value
@@ -25,6 +51,7 @@
     // Get input values
     var gasPriceUS = parseFloat(document.getElementById('gasPriceUS').value);
     var gasPriceMexico = parseFloat(document.getElementById('gasPriceMexico').value);
+    var tankCapacity = parseFloat(document.getElementById('tankCapacity').value);
 
     // Fetch live exchange rate
     getLiveExchangeRate()
@@ -33,9 +60,14 @@
         var pricePerLiterUS = gasPriceUS / unitConversion;
         var pricePerLiterMexico = gasPriceMexico / exchangeRate;
 
+        var costToFillTankUS = (gasPriceUS / unitConversion) * tankCapacity;
+        var costToFillTankMexico = (gasPriceMexico / exchangeRate) * tankCapacity;
+
         // Display results
         document.getElementById('pricePerLiterUS').innerHTML = 'Cost per Liter in the US (USD): $' + pricePerLiterUS.toFixed(2);
         document.getElementById('pricePerLiterMexico').innerHTML = 'Cost per Liter in Mexico (USD): $' + pricePerLiterMexico.toFixed(2);
+        document.getElementById('costToFillTankUS').innerHTML = 'Cost to Fill Tank in the US (USD): $' + costToFillTankUS.toFixed(2);
+        document.getElementById('costToFillTankMexico').innerHTML = 'Cost to Fill Tank in Mexico (USD): $' + costToFillTankMexico.toFixed(2);
       })
       .catch((error) => {
         console.error('Error fetching exchange rate:', error);
